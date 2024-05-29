@@ -38,3 +38,7 @@ struct NewHabit: View {
         }
     }
 }
+
+//#Preview {
+//    NewHabit(habits: $habits)
+//}

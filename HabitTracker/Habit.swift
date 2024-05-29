@@ -19,10 +19,14 @@ struct Habit: Codable, Hashable, Identifiable {
         self.description = description
         self.count = count
     }
+    
+    mutating func increaseCount() {
+        count += 1
+    }
 }
 
 @Observable
-class Habits {
+class HabitStore {
     var allHabits: [Habit] {
         didSet {
             if let encoded = try? JSONEncoder().encode(allHabits) {

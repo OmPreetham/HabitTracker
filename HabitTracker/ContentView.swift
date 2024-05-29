@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var habits = Habits()
+    @State private var habitStore = HabitStore()
     
     @State private var showingSheet = false
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(habits.allHabits, id: \.self) { habit in
-                    NavigationLink(destination: HabitView(habit: habit)) {
-                        VStack(alignment: .leading) {
-                            Text(habit.name)
-                                .font(.headline)
-                            Text(habit.description)
-                                .foregroundColor(.secondary)
+                ForEach(Array(habitStore.allHabits.enumerated()), id: \.element) { index, habit in
+                    NavigationLink(destination: HabitView(habit: $habitStore.allHabits[index])) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(habit.name)
+                                    .font(.headline)
+                                Text(habit.description)
+                                    .foregroundColor(.secondary)
+                            }
                         }
-                        .fontDesign(.monospaced)
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button {
+                            habitStore.allHabits[index].increaseCount()
+                        } label: {
+                            Label("Increase", systemImage: "plus")
+                        }
+                        .tint(.green)
                     }
                 }
                 .onDelete(perform: { indexSet in
@@ -42,13 +51,13 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingSheet) {
-                NewHabit(habits: $habits.allHabits)
+                NewHabit(habits: $habitStore.allHabits)
             }
         }
     }
     
     func removeRows(at offsets: IndexSet) {
-        habits.allHabits.remove(atOffsets: offsets)
+        habitStore.allHabits.remove(atOffsets: offsets)
     }
 }
 

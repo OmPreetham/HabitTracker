@@ -8,21 +8,39 @@
 import SwiftUI
 
 struct HabitView: View {
-    var habit: Habit
+    @Binding var habit: Habit
     
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                Text(habit.description)
-                    .fontDesign(.monospaced)
+        VStack(alignment: .leading, spacing: 20) {
+            Text(habit.description)
+                .font(.body)
+                .foregroundColor(.secondary)
+            
+            HStack(spacing: 20) {
+                Text("Count:")
+                    .font(.headline)
                 Text("\(habit.count)")
-                    .fontDesign(.monospaced)
+                    .font(.headline)
+                    .foregroundColor(.blue)
             }
-            .navigationTitle(habit.name)
+            
+            Button(action: {
+                habit.increaseCount()
+            }) {
+                Text("Increase Count")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
         }
+        .padding()
+        .navigationBarTitle(habit.name)
+        Spacer()
     }
 }
 
-#Preview {
-    HabitView(habit: Habit(name: "Read Books", description: "Read for 15 minutes", count: 2))
-}
+//#Preview {
+//    HabitView(habit: Habit(name: "Read Books", description: "Read for 15 minutes", count: 2))
+//}
